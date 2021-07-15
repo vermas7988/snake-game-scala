@@ -19,7 +19,10 @@ package snake
  */
 
 object Solution extends App {
-  val newGame = SnakeGame(7,7)
+  val snake: Snake = Snake((3,5),(4,5),(5,5))
+  val food: Food   = (1,3)
+  val boardDimensions = (7,7)
+  val newGame = SnakeGame(boardDimensions,snake,food)
   newGame.play
 }
 
