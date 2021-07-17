@@ -38,9 +38,14 @@ package object snake {
   implicit class FoodClass(food:Food) {
     /**Spawns food to new location once food is ate.*/
     @tailrec
-    final def process(width: Int, height: Int)(snake: Snake):(Int,Int) = {
+    final def process(width: Int, height: Int)(snake: Snake, game: SnakeGame):(Int,Int) = {
+      if(snake.snake.size==width*height) {
+        game.state = GameStates.WON
+        println(Console.GREEN + "Game Completed. You won." + Console.RESET)
+        (-1,-1)
+      } else
       (Random.nextInt(width),Random.nextInt(height)) match {
-        case x if snake.snake.contains(x) => process(width: Int,height: Int)(snake: Snake)
+        case x if snake.snake.contains(x) => process(width: Int,height: Int)(snake: Snake,game)
         case x                        => x
       }
     }

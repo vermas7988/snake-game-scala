@@ -19,16 +19,12 @@ case class SnakeGame(dimension: Dimension, var snake: Snake, var food: Food) {
     while(state==GameStates.ONGOING) {
       println("\u001b[2J")
       board(width,height)(snake,food).print
-      if(snake.snake.size==width*height) {
-        state = GameStates.WON
-        println(Console.GREEN + "Game Completed. You won." + Console.RESET)
-      } else
-        Try(makeMove(recordInput)) match {
-          case Failure(exception) =>
-            println(Console.RED + exception.getMessage + Console.RESET)
-            state = GameStates.LOST
-          case Success(_) => ()
-        }
+      Try(makeMove(recordInput)) match {
+        case Failure(exception) =>
+          println(Console.RED + exception.getMessage + Console.RESET)
+          state = GameStates.LOST
+        case Success(_) => ()
+      }
     }
   }
 
@@ -46,7 +42,7 @@ case class SnakeGame(dimension: Dimension, var snake: Snake, var food: Food) {
     if(c!=snake.oppositeDirection(snake.direction)) {
       val head = snake.newHead(c)(width,height)
       snake = Snake((head :: snake.snake.toList):_*)
-      if(head==food) food = food.process(width,height)(snake)
+      if(head==food) food = food.process(width,height)(snake, this)
       else snake = Snake(snake.snake.dropRight(1):_*)
       snake.direction = c
     }
